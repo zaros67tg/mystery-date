@@ -1,66 +1,67 @@
 let step = 0;
+let path = [];
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Script Loaded");
+    showBoxes();
 });
 
-function showOptions(startStep) {
-    step = startStep;
+function showBoxes() {
+    document.querySelector(".background").innerHTML = `
+        <div class="treasure-box" onclick="selectOption(1)">🎁</div>
+        <div class="treasure-box" onclick="selectOption(2)">🎁</div>
+    `;
+}
+
+function selectOption(choice) {
+    path.push(choice);
     document.getElementById("overlay").style.display = "flex";
     document.getElementById("dialogue-box").style.display = "block";
-    nextStep();
+    showDialogue();
 }
 
-function nextStep() {
-    console.log("Next step triggered, Step:", step);
+function showDialogue() {
     const dialogueText = document.getElementById("dialogue-text");
     let options = "";
-    
-    switch (step) {
-        case 1:
-            options = "Choose Budget:<br> <button onclick='goToStep(2)'>Open Budget 💸</button> <button onclick='goToStep(3)'>Under 1K 💰</button>";
-            break;
-        case 2:
-        case 3:
-            options = "Where?<br> <button onclick='goToStep(4)'>In City 🏙️</button> <button onclick='goToStep(5)'>Outside City 🚗</button>";
-            break;
-        case 4:
-        case 5:
-            options = "Choose Activity:<br> <button onclick='goToStep(6)'>Movie 🎬</button> <button onclick='goToStep(7)'>Gaming Zone 🎮</button>";
-            break;
-        case 6:
-        case 7:
-            options = "Food Choice:<br> <button onclick='goToStep(8)'>Restaurant 🍽️</button> <button onclick='goToStep(9)'>Street Food 🍜</button>";
-            break;
-        case 8:
-        case 9:
-            options = "Final Choice:<br> <button onclick='goToStep(10)'>Solo Trip 🏝️</button> <button onclick='goToStep(11)'>Meet Friends 👥</button>";
-            break;
-        case 10:
-            options = "Enjoy your Solo Trip! 🏝️<br><button onclick='closeOverlay()'>Close</button>";
-            confetti();
-            playMusic();
-            break;
-        case 11:
-            options = "Have fun meeting friends! 👥<br><button onclick='closeOverlay()'>Close</button>";
-            confetti();
-            playMusic();
-            break;
-        default:
-            console.warn("Step out of range:", step);
-            return;
-    }
-    dialogueText.innerHTML = options;
-}
 
-function goToStep(nextStep) {
-    step = nextStep;
-    nextStep();
+    if (path.length === 1) {
+        options = path[0] === 1 ? "Your budget is Open Budget 💸" : "Your budget is Under 1K 💰";
+    } else if (path.length === 2) {
+        options = path[1] === 1 ? "Location: In City 🏙️" : "Location: Outside City 🚗";
+    } else if (path.length === 3 && path[1] === 1) {
+        options = path[2] === 1 ? "Special Case: Movie 🎬" : "Special Case: Gaming Zone 🎮";
+    } else if (path.length === 3) {
+        options = path[2] === 1 ? "Movie 🎬" : "Gaming Zone 🎮";
+    } else if (path.length === 4) {
+        options = path[3] === 1 ? "Restaurant 🍽️" : "Street Food 🍜";
+    } else if (path.length === 5) {
+        options = path[4] === 1 ? "Solo Trip 🏝️" : "Meet Friends 👥";
+    } else if (path.length === 6) {
+        options = path[5] === 1 ? "Enjoy your Solo Trip! 🏝️" : "Have fun meeting friends! 👥";
+        confetti();
+        playMusic();
+    }
+
+    dialogueText.innerHTML = options;
+    if (path.length < 6) {
+        dialogueText.innerHTML += "<br><button onclick='closeOverlay()'>Next</button>";
+    } else {
+        dialogueText.innerHTML += "<br><button onclick='restart()'>Restart</button>";
+    }
 }
 
 function closeOverlay() {
     document.getElementById("overlay").style.display = "none";
     document.getElementById("dialogue-box").style.display = "none";
+    if (path.length < 6) {
+        showBoxes();
+    }
+}
+
+function restart() {
+    path = [];
+    closeOverlay();
+    showBoxes();
 }
 
 function playMusic() {
