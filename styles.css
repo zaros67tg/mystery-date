@@ -1,4 +1,4 @@
-/* General Styles */
+/* General Styling */
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
@@ -10,16 +10,16 @@ body {
     overflow: hidden;
 }
 
-/* Container for boxes */
+/* Background Styling */
 .background {
     display: flex;
-    gap: 30px;
+    gap: 40px;
 }
 
-/* Mystery Box */
+/* Mystery Box Styling */
 .treasure-box {
-    width: 120px;
-    height: 120px;
+    width: 130px;
+    height: 130px;
     background: white;
     border-radius: 15px;
     display: flex;
@@ -27,22 +27,28 @@ body {
     align-items: center;
     font-size: 3em;
     cursor: pointer;
-    animation: bounce 1.5s infinite;
     box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease-in-out;
+    animation: popUp 0.5s ease-out;
 }
 
 .treasure-box:hover {
     transform: scale(1.15);
 }
 
-/* Bounce Animation */
-@keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+/* Pop-Up Animation */
+@keyframes popUp {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
-/* Overlay & Dialogue Box */
+/* Dark Overlay */
 .overlay {
     position: fixed;
     top: 0;
@@ -55,6 +61,7 @@ body {
     align-items: center;
 }
 
+/* Pop-Up Box */
 .dialogue-box {
     background: white;
     padding: 25px;
@@ -63,9 +70,10 @@ body {
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     display: none;
     max-width: 80%;
+    animation: popUp 0.3s ease-out;
 }
 
-/* Button Styles */
+/* Buttons */
 button {
     font-size: 18px;
     padding: 10px 20px;
