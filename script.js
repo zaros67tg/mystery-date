@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function showBoxes() {
     const background = document.getElementById("background");
-    background.innerHTML = "";
+    background.innerHTML = ""; 
 
     let options = getOptions();
     if (options.length === 2) {
@@ -16,7 +16,7 @@ function showBoxes() {
             let box = document.createElement("div");
             box.classList.add("treasure-box");
             box.innerHTML = "🎁";
-            box.onclick = () => selectOption(index + 1);
+            box.onclick = () => selectOption(index);
             background.appendChild(box);
         });
     }
@@ -32,36 +32,25 @@ function getOptions() {
     return [];
 }
 
-function selectOption(choice) {
-    choices.push(choice);
-    showDialogue();
+function selectOption(index) {
+    let options = getOptions();
+    let selectedOption = options[index];
+
+    choices.push(index);  // Store the choice
+
+    showDialogue(selectedOption);
 }
 
-function showDialogue() {
+function showDialogue(selectedText) {
     const overlay = document.getElementById("overlay");
     const dialogueBox = document.getElementById("dialogue-box");
     const dialogueText = document.getElementById("dialogue-text");
 
-    let options = getOptions();
-    
-    // Clear previous content
-    dialogueText.innerHTML = "";
-    
-    // If no options are left, show final result
-    if (options.length === 0) {
-        dialogueText.innerHTML = choices[4] === 1 ? "Enjoy your Solo Trip! 🏝️" : "Have fun meeting friends! 👥";
-        dialogueText.innerHTML += "<br><button onclick='restart()'>Restart</button>";
-        confetti();
-        playMusic();
-    } else {
-        dialogueText.innerHTML = "Choose an Option:";
-        options.forEach((option, index) => {
-            dialogueText.innerHTML += `<br><button onclick="selectOption(${index + 1})">${option}</button>`;
-        });
-    }
-
     overlay.style.display = "flex";
     dialogueBox.style.display = "block";
+
+    dialogueText.innerHTML = selectedText;
+    dialogueText.innerHTML += "<br><button onclick='closeOverlay()'>Next</button>";
 }
 
 function closeOverlay() {
@@ -74,11 +63,4 @@ function restart() {
     choices = [];
     closeOverlay();
     showBoxes();
-}
-
-function playMusic() {
-    const audio = document.getElementById("background-music");
-    if (audio.paused) {
-        audio.play().catch(error => console.error("Autoplay prevented:", error));
-    }
 }
