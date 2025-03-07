@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function showBoxes() {
-    const background = document.querySelector(".background");
-    background.innerHTML = ""; 
+    const background = document.getElementById("background");
+    background.innerHTML = "";
 
     let options = getOptions();
     if (options.length === 2) {
