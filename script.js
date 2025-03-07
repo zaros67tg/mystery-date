@@ -41,20 +41,27 @@ function showDialogue() {
     const overlay = document.getElementById("overlay");
     const dialogueBox = document.getElementById("dialogue-box");
     const dialogueText = document.getElementById("dialogue-text");
-    
-    overlay.style.display = "flex";
-    dialogueBox.style.display = "block";
 
     let options = getOptions();
+    
+    // Clear previous content
+    dialogueText.innerHTML = "";
+    
+    // If no options are left, show final result
     if (options.length === 0) {
         dialogueText.innerHTML = choices[4] === 1 ? "Enjoy your Solo Trip! 🏝️" : "Have fun meeting friends! 👥";
         dialogueText.innerHTML += "<br><button onclick='restart()'>Restart</button>";
         confetti();
         playMusic();
     } else {
-        dialogueText.innerHTML = "Next Choice!";
-        dialogueText.innerHTML += "<br><button onclick='closeOverlay()'>Next</button>";
+        dialogueText.innerHTML = "Choose an Option:";
+        options.forEach((option, index) => {
+            dialogueText.innerHTML += `<br><button onclick="selectOption(${index + 1})">${option}</button>`;
+        });
     }
+
+    overlay.style.display = "flex";
+    dialogueBox.style.display = "block";
 }
 
 function closeOverlay() {
