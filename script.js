@@ -2,7 +2,6 @@ let step = 0;
 let choices = [];
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("Script Loaded");
     showBoxes();
 });
 
@@ -16,7 +15,7 @@ function showBoxes() {
             let box = document.createElement("div");
             box.classList.add("treasure-box");
             box.innerHTML = "🎁";
-            box.onclick = () => selectOption(index);
+            box.onclick = () => selectOption(index, option);
             background.appendChild(box);
         });
     }
@@ -32,13 +31,11 @@ function getOptions() {
     return [];
 }
 
-function selectOption(index) {
-    let options = getOptions();
-    let selectedOption = options[index];
-
+function selectOption(index, selectedText) {
     choices.push(index);  // Store the choice
 
-    showDialogue(selectedOption);
+    // Show popup
+    showDialogue(selectedText);
 }
 
 function showDialogue(selectedText) {
@@ -49,11 +46,14 @@ function showDialogue(selectedText) {
     overlay.style.display = "flex";
     dialogueBox.style.display = "block";
 
-    dialogueText.innerHTML = selectedText;
-    dialogueText.innerHTML += "<br><button onclick='closeOverlay()'>Next</button>";
+    // Display selected option
+    dialogueText.innerHTML = `<strong>${selectedText}</strong>`;
+
+    // Show next button
+    document.getElementById("next-btn").style.display = "block";
 }
 
-function closeOverlay() {
+function nextStep() {
     document.getElementById("overlay").style.display = "none";
     document.getElementById("dialogue-box").style.display = "none";
     showBoxes();
@@ -61,6 +61,5 @@ function closeOverlay() {
 
 function restart() {
     choices = [];
-    closeOverlay();
-    showBoxes();
+    nextStep();
 }
