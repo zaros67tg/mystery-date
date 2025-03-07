@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mystery Date</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background">
+        <div class="treasure-box" onclick="showOptions(1)">🎁</div>
+    </div>
+
+    <!-- Hidden overlay for dialogues -->
+    <div class="overlay" id="overlay" onclick="closeOverlay()">
+        <div class="dialogue-box" id="dialogue-box">
+            <p id="dialogue-text"></p>
+            <button id="next-btn" onclick="nextStep()">Next</button>
+        </div>
+    </div>
+
+    <audio id="background-music" loop>
+        <source src="https://raw.githubusercontent.com/TheDataDesk/Binary-Love/main/song.mp3" type="audio/mp3">
+    </audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0"></script>
+    <script src="script.js"></script>
+</body>
+</html>
