@@ -14,9 +14,8 @@ function showOptions(startStep) {
 function nextStep() {
     console.log("Next step triggered, Step:", step);
     const dialogueText = document.getElementById("dialogue-text");
-    const nextBtn = document.getElementById("next-btn");
-
     let options = "";
+    
     switch (step) {
         case 1:
             options = "Choose Budget:<br> <button onclick='goToStep(2)'>Open Budget 💸</button> <button onclick='goToStep(3)'>Under 1K 💰</button>";
@@ -51,7 +50,6 @@ function nextStep() {
             console.warn("Step out of range:", step);
             return;
     }
-
     dialogueText.innerHTML = options;
 }
 
