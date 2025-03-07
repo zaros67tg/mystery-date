@@ -1,5 +1,5 @@
 let step = 0;
-let path = [];
+let choices = [];
 
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Script Loaded");
@@ -7,59 +7,64 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function showBoxes() {
-    document.querySelector(".background").innerHTML = `
-        <div class="treasure-box" onclick="selectOption(1)">🎁</div>
-        <div class="treasure-box" onclick="selectOption(2)">🎁</div>
-    `;
+    const background = document.querySelector(".background");
+    background.innerHTML = ""; 
+    
+    let options = getOptions();
+    if (options.length === 2) {
+        options.forEach((option, index) => {
+            let box = document.createElement("div");
+            box.classList.add("treasure-box");
+            box.innerHTML = "🎁";
+            box.onclick = () => selectOption(index + 1);
+            background.appendChild(box);
+        });
+    }
+}
+
+function getOptions() {
+    if (choices.length === 0) return ["Open Budget 💸", "Under 1K 💰"];
+    if (choices.length === 1) return ["In City 🏙️", "Outside City 🚗"];
+    if (choices.length === 2 && choices[1] === 1) return ["Movie 🎬", "Gaming Zone 🎮"]; // Special Case
+    if (choices.length === 2) return ["Movie 🎬", "Gaming Zone 🎮"];
+    if (choices.length === 3) return ["Restaurant 🍽️", "Street Food 🍜"];
+    if (choices.length === 4) return ["Solo Trip 🏝️", "Meet Friends 👥"];
+    return [];
 }
 
 function selectOption(choice) {
-    path.push(choice);
-    document.getElementById("overlay").style.display = "flex";
-    document.getElementById("dialogue-box").style.display = "block";
+    choices.push(choice);
     showDialogue();
 }
 
 function showDialogue() {
+    const overlay = document.getElementById("overlay");
+    const dialogueBox = document.getElementById("dialogue-box");
     const dialogueText = document.getElementById("dialogue-text");
-    let options = "";
+    
+    overlay.style.display = "flex";
+    dialogueBox.style.display = "block";
 
-    if (path.length === 1) {
-        options = path[0] === 1 ? "Your budget is Open Budget 💸" : "Your budget is Under 1K 💰";
-    } else if (path.length === 2) {
-        options = path[1] === 1 ? "Location: In City 🏙️" : "Location: Outside City 🚗";
-    } else if (path.length === 3 && path[1] === 1) {
-        options = path[2] === 1 ? "Special Case: Movie 🎬" : "Special Case: Gaming Zone 🎮";
-    } else if (path.length === 3) {
-        options = path[2] === 1 ? "Movie 🎬" : "Gaming Zone 🎮";
-    } else if (path.length === 4) {
-        options = path[3] === 1 ? "Restaurant 🍽️" : "Street Food 🍜";
-    } else if (path.length === 5) {
-        options = path[4] === 1 ? "Solo Trip 🏝️" : "Meet Friends 👥";
-    } else if (path.length === 6) {
-        options = path[5] === 1 ? "Enjoy your Solo Trip! 🏝️" : "Have fun meeting friends! 👥";
+    let options = getOptions();
+    if (options.length === 0) {
+        dialogueText.innerHTML = choices[4] === 1 ? "Enjoy your Solo Trip! 🏝️" : "Have fun meeting friends! 👥";
+        dialogueText.innerHTML += "<br><button onclick='restart()'>Restart</button>";
         confetti();
         playMusic();
-    }
-
-    dialogueText.innerHTML = options;
-    if (path.length < 6) {
-        dialogueText.innerHTML += "<br><button onclick='closeOverlay()'>Next</button>";
     } else {
-        dialogueText.innerHTML += "<br><button onclick='restart()'>Restart</button>";
+        dialogueText.innerHTML = "Next Choice!";
+        dialogueText.innerHTML += "<br><button onclick='closeOverlay()'>Next</button>";
     }
 }
 
 function closeOverlay() {
     document.getElementById("overlay").style.display = "none";
     document.getElementById("dialogue-box").style.display = "none";
-    if (path.length < 6) {
-        showBoxes();
-    }
+    showBoxes();
 }
 
 function restart() {
-    path = [];
+    choices = [];
     closeOverlay();
     showBoxes();
 }
