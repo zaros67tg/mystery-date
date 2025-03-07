@@ -1,3 +1,4 @@
+/* General Styles */
 body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
@@ -9,11 +10,13 @@ body {
     overflow: hidden;
 }
 
+/* Container for boxes */
 .background {
     display: flex;
     gap: 30px;
 }
 
+/* Mystery Box */
 .treasure-box {
     width: 120px;
     height: 120px;
@@ -33,11 +36,13 @@ body {
     transform: scale(1.15);
 }
 
+/* Bounce Animation */
 @keyframes bounce {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-15px); }
 }
 
+/* Overlay & Dialogue Box */
 .overlay {
     position: fixed;
     top: 0;
@@ -60,6 +65,7 @@ body {
     max-width: 80%;
 }
 
+/* Button Styles */
 button {
     font-size: 18px;
     padding: 10px 20px;
