@@ -8,11 +8,11 @@
 </head>
 <body>
     <div class="background">
-        <div class="treasure-box" onclick="showOptions(1)">🎁</div>
-        <div class="treasure-box" onclick="showOptions(1)">🎁</div>
+        <div class="treasure-box" onclick="selectOption(1)">🎁</div>
+        <div class="treasure-box" onclick="selectOption(2)">🎁</div>
     </div>
 
-    <div class="overlay" id="overlay" onclick="closeOverlay()">
+    <div class="overlay" id="overlay">
         <div class="dialogue-box" id="dialogue-box">
             <p id="dialogue-text"></p>
             <button id="next-btn" onclick="nextStep()">Next</button>
