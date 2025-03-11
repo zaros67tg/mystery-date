@@ -1,7 +1,7 @@
 let step = 0;
 let choices = [];
 
-// Probabilities for certain choices
+// Probabilities for weighted choices
 const probabilities = {
     budget: { "Under 1K 💰": 1.0, "Open Budget 💸": 0.0 },
     activity: { "Gaming Zone 🎮": 0.8, "Movie 🎬": 0.2 }
@@ -17,22 +17,19 @@ function showBoxes() {
     background.innerHTML = ""; 
     
     let options = getOptions();
-    if (options.length === 2) {
-        options.forEach((option, index) => {
-            let box = document.createElement("div");
-            box.classList.add("treasure-box");
-            box.innerHTML = "🎁";
-            box.onclick = () => selectOption(option, index);
-            background.appendChild(box);
-        });
-    }
+    options.forEach(option => {
+        let box = document.createElement("div");
+        box.classList.add("treasure-box");
+        box.innerHTML = "🎁";
+        box.onclick = () => selectOption(option);
+        background.appendChild(box);
+    });
 }
 
 function getOptions() {
     if (choices.length === 0) return weightedChoice(probabilities.budget);
     if (choices.length === 1) return ["In City 🏙️", "Outside City 🚗"];
-    if (choices.length === 2 && choices[1] === "In City 🏙️") return weightedChoice(probabilities.activity); // Special Case
-    if (choices.length === 2) return ["Movie 🎬", "Gaming Zone 🎮"];
+    if (choices.length === 2) return weightedChoice(probabilities.activity);
     if (choices.length === 3) return ["Restaurant 🍽️", "Street Food 🍜"];
     if (choices.length === 4) return ["Long Ride 🏍️", "Meet Friends 👥"];
     return [];
@@ -44,17 +41,17 @@ function weightedChoice(probabilityObj) {
     let cumulative = 0;
     for (let option of options) {
         cumulative += probabilityObj[option];
-        if (rand < cumulative) return [option, options.find(o => o !== option)];
+        if (rand < cumulative) return [option];
     }
-    return options;
+    return [options[0]];
 }
 
-function selectOption(choice, index) {
+function selectOption(choice) {
     choices.push(choice);
-    showDialogue(choice, index);
+    showDialogue(choice);
 }
 
-function showDialogue(selected, index) {
+function showDialogue(selected) {
     const overlay = document.getElementById("overlay");
     const dialogueBox = document.getElementById("dialogue-box");
     const dialogueText = document.getElementById("dialogue-text");
@@ -62,15 +59,10 @@ function showDialogue(selected, index) {
     overlay.style.display = "flex";
     dialogueBox.style.display = "block";
 
-    let options = getOptions();
-    let notSelected = options.find(o => o !== selected);
-    
-    dialogueText.innerHTML = `<b>${selected}</b>`;
-    dialogueText.innerHTML += `<div class='not-selected'>${notSelected}</div>`;
-    dialogueText.innerHTML += "<br><button onclick='closeOverlay()'>Next</button>";
+    dialogueText.innerHTML = `<b>${selected}</b><br><button onclick='nextStep()'>Next</button>`;
 }
 
-function closeOverlay() {
+function nextStep() {
     document.getElementById("overlay").style.display = "none";
     document.getElementById("dialogue-box").style.display = "none";
     showBoxes();
@@ -78,6 +70,5 @@ function closeOverlay() {
 
 function restart() {
     choices = [];
-    closeOverlay();
-    showBoxes();
+    nextStep();
 }
