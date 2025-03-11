@@ -31,7 +31,7 @@ function showBoxes() {
 function getOptions() {
     if (choices.length === 0) return weightedChoice(probabilities.budget);
     if (choices.length === 1) return ["In City 🏙️", "Outside City 🚗"];
-    if (choices.length === 2 && choices[1] === "In City 🏙️") return weightedChoice(probabilities.activity); 
+    if (choices.length === 2 && choices[1] === "In City 🏙️") return weightedChoice(probabilities.activity); // Special Case
     if (choices.length === 2) return ["Movie 🎬", "Gaming Zone 🎮"];
     if (choices.length === 3) return ["Restaurant 🍽️", "Street Food 🍜"];
     if (choices.length === 4) return ["Long Ride 🏍️", "Meet Friends 👥"];
@@ -61,15 +61,16 @@ function showDialogue(selected) {
     
     overlay.style.display = "flex";
     dialogueBox.style.display = "block";
-    
+
     let options = getOptions();
-    let notSelected = options.length === 2 ? options.find(o => o !== selected) : null;
     
-    dialogueText.innerHTML = `<b>${selected}</b>`;
-    if (notSelected) {
-        dialogueText.innerHTML += `<br><div class='not-selected'>${notSelected}</div>`;
+    // Display only the selected choice properly
+    dialogueText.innerHTML = `<b>${selected}</b><br><br>`;
+    if (options.length > 0) {
+        dialogueText.innerHTML += `<button onclick='closeOverlay()'>Next</button>`;
+    } else {
+        dialogueText.innerHTML += `<button onclick='restart()'>Restart</button>`;
     }
-    dialogueText.innerHTML += `<br><button onclick='closeOverlay()'>Next</button>`;
 }
 
 function closeOverlay() {
